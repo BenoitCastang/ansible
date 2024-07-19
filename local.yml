@@ -1,0 +1,25 @@
+---
+- name: Set up apache web server
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Apt update and dist-upgrade
+      apt:
+        update_cache: yes
+        upgrade: dist
+    - name: Install apache2, php and mariadb
+      apt:
+        name: 
+          - apache2
+          - php
+          - mariadb-server
+    - name: Start the apache2 services
+      service:
+        name: apache2
+        state: started
+        enabled: true
+    - name: Copy website files
+      synchronize:
+        src: /home/ansible/personal-website/
+        dest: /var/www/html/
+        delete: yes
